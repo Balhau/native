@@ -55,7 +55,7 @@ ssize_t write(int fd,const void *buf,size_t count){
 }
 
 ssize_t send(int fd,const void *buf,size_t len,int flags){
-  fprintf(stdout,"Send call: %s\n",buf);
+  fprintf(stdout,"send_call: %s\n",buf);
   fflush(stdout);
 
   real_send=dlsym(RTLD_NEXT,"send");

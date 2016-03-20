@@ -1,4 +1,4 @@
-Send call: Hello there
+send_call: Hello there
 write_call: Hello master wayne
 
 Hello master wayne
