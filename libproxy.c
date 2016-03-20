@@ -7,27 +7,57 @@
 
 //Pointers for libc calls
 
+//Revert the string
+char * strrev(char *str)
+
+{
+    int i = strlen(str)-2,j=0;
+
+    char ch;
+    while(i>j)
+    {
+        ch = str[i];
+        str[i]= str[j];
+        str[j] = ch;
+        i--;
+        j++;
+    }
+    return str;
+}
+
+/*
+Function prototypes
+*/
 static  ssize_t (*real_sendto)
-              (int sockfd, const void *buf, size_t len, int flags,
-              const struct sockaddr *dest_addr, socklen_t addrlen
-            ) = NULL;
+              (int fd, const __ptr_t buf, size_t n, int flags,
+              	  __CONST_SOCKADDR_ARG addr, socklen_t addr_len) = NULL;
 
 static ssize_t (*real_write)(int fd, const void *buf, size_t count) = NULL;
 
-ssize_t sendto(int sockfd,
-                const void *buf, size_t len, int flags,
-                const struct sockaddr *dest_addr, socklen_t addrlen){
+static ssize_t (*real_send)(int sockfd, const void *buf, size_t len, int flags) = NULL;
 
-      fprintf(stdout,"sendto_call: %s",buf);
+ssize_t sendto(int fd, const __ptr_t buf, size_t n, int flags,
+	  __CONST_SOCKADDR_ARG addr, socklen_t addr_len){
+
+      fprintf(stdout,"sendto_call: %s\n",buf);
       fflush(stdout);
 
       real_sendto = dlsym(RTLD_NEXT, "sendto");
-      return real_sendto(sockfd,buf,len,flags,dest_addr,addrlen);
+      return real_sendto(fd,buf,n,flags,addr,addr_len);
 }
 
 ssize_t write(int fd,const void *buf,size_t count){
-  fprintf(stdout, "write_call: %s",buf);
+  fprintf(stdout, "write_call: %s\n",buf);
   fflush(stdout);
+
   real_write=dlsym(RTLD_NEXT,"write");
   return real_write(fd,buf,count);
+}
+
+ssize_t send(int fd,const void *buf,size_t len,int flags){
+  fprintf(stdout,"Send call: %s\n",buf);
+  fflush(stdout);
+
+  real_send=dlsym(RTLD_NEXT,"send");
+  return real_send(fd,buf,len,flags);
 }

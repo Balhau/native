@@ -46,4 +46,13 @@ So the next step is to find if we got some symbol *sendto* in the libc. We [foun
       socklen_t addrlen
     );
 
+and
+
+    ssize_t send(
+        int sockfd,
+        const void * buf,
+        size_t len,
+        int flags
+    );
+
 So the next step consists in create a shared object with proxy for this call and fetch it, with LD_PRELOAD, into the running script.
