@@ -5,7 +5,9 @@
 This is an experimental repository with some native code (target for linux) to proxy some libc calls and by doing this being able to monitor what native aplications and any language based on an interpreter is trying to do at lower level.
 
 
-## Use case
+## Use cases
+
+### Monitor python script network system calls and output print
 
 Here we create a simple python application application called **send_socket_data.py** which basically opens a connection, sends some data and then closes the connection. The code is as simple as:
 
@@ -55,4 +57,23 @@ and
         int flags
     );
 
-So the next step consists in create a shared object with proxy for this call and fetch it, with LD_PRELOAD, into the running script.
+So the next step consists in create a shared object with proxy for this call and fetch it, with LD_PRELOAD, into the running script. For that we can inject before the command or export the LD_PRELOAD on the shell environment
+
+    LD_PRELOAD=./libproxyc.so python send_socket_data.py
+
+If this doesn't work the reason is explained [here](https://eklitzke.org/ld-preload-hacks). So as said in the article you need to recompile your python with the option of *position independent code in shared libraries* so you need to do this
+
+    ./configure --enable-shared
+
+With the new version of python interpreter installed you can run the script with this
+
+    LD_PRELOAD=./libproxyc.so ~/Downloads/Python-3.5.1/python send_socket_data.py
+
+The output of the previous command will return the print of *write* and *send* system calls as well as the *print("Hello master wayne")* Python instruction.
+
+    send_call: Hello there
+    write_call: Hello master wayne
+
+    Hello master wayne
+
+### Monitoring network operations
