@@ -77,3 +77,9 @@ The output of the previous command will return the print of *write* and *send* s
     Hello master wayne
 
 ### Monitoring network operations
+
+A java tool called httpstress is used to stress test http servers and basically does a bunch of get requests stress testing purposes.
+
+    LD_PRELOAD=./libproxyc.so java -cp
+    ~/IdeaProjects/balhau/apps/target/apps-1.0-SNAPSHOT-jar-with-dependencies.jar
+    com.balhau.apps.httpstress pi.balhau.net:80 2 2 2> stress.txt
