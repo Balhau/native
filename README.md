@@ -83,3 +83,12 @@ A java tool called httpstress is used to stress test http servers and basically 
     LD_PRELOAD=./libproxyc.so java -cp
     ~/IdeaProjects/balhau/apps/target/apps-1.0-SNAPSHOT-jar-with-dependencies.jar
     com.balhau.apps.httpstress pi.balhau.net:80 2 2 2> stress.txt
+
+You can check on the stress.txt all the system call logging and the data passed to it
+
+
+### More uses
+
+By using a tool like *strace* and a system call proxy lib you can fine tune the interception of calls and by doing so you can do a more refined reverse engineering of any program in any programming language, since this will intercept the native calls as well as the interpreter of non native programming languages. Here we exemplified how to intercept calls in native program as well as in two non native ones like *Python* and *Java*.
+
+Other than interception mechanism you can change data passed to the system calls and by this way you can change behaviour in runtime. This can be useful when creating mechanisms to override certain security mechanisms and/or to understand better the behaviour by controlling the data passed in certain calls. 
